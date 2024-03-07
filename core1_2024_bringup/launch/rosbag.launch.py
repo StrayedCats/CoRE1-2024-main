@@ -10,19 +10,19 @@ def generate_launch_description():
     home_dir = os.path.expanduser('~')
 
     use_rosbag = LaunchConfiguration('use_rosbag', default='false')
-    bag_file = LaunchConfiguration('bag_file', default=os.path.join(home_dir, 'rosbag2_2024_02_25-03_32_06'))
+    rosbag_dir = LaunchConfiguration('rosbag_dir', default=os.path.join(home_dir, 'example.bag'))
 
-    bag_file_arg = DeclareLaunchArgument('bag_file', default_value=bag_file, description='Full path to bag file to play')
+    rosbag_dir_arg = DeclareLaunchArgument('rosbag_dir', default_value=rosbag_dir, description='Path to rosbag file')
     use_rosbag_arg = DeclareLaunchArgument('use_rosbag', default_value=use_rosbag, description='Use rosbag')
     
     bag_play_exec = ExecuteProcess(
         condition=IfCondition(use_rosbag),
-        cmd=['ros2', 'bag', 'play', bag_file],
+        cmd=['ros2', 'bag', 'play', rosbag_dir],
         output='screen'
     )
 
     return LaunchDescription([
-        bag_file_arg,
+        rosbag_dir_arg,
         use_rosbag_arg,
         bag_play_exec,
     ])
