@@ -8,5 +8,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         IncLaunch(PyLaunch([this_launch_pkg, '/launch/rosbag.launch.py'])),
-        IncLaunch(PyLaunch([this_launch_pkg, '/launch/detector_bringup.launch.py']))
+        IncLaunch(PyLaunch([this_launch_pkg, '/launch/sim_detector.launch.py'])),
+        # IncLaunch(PyLaunch([this_launch_pkg, '/launch/detector_bringup.launch.py']))
     ])
