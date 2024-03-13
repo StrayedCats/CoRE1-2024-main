@@ -24,3 +24,11 @@ ROSBAG=/home/core2024/rosbag2_2024_02_25-03_32_06
 source ~/ws_2024/install/setup.bash
 ros2 launch core1_2024_bringup main.launch.py use_rosbag:=True rosbag_dir:=${ROSBAG} use_viewer:=True 
 ```
+
+## Options
+
+- use_core1_hardware : Use CoRE-1 hardware or not
+- use_rosbag : Use rosbag or not (If enable, disable RealSense node automatically)
+- use_viewer : use debug OpenCV window or not
+- rosbag_dir : rosbag directory path
+- use_apriltag : use apriltag detector or not

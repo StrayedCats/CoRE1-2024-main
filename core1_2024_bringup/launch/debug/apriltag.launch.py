@@ -3,19 +3,19 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from launch.conditions import UnlessCondition
+from launch.conditions import IfCondition
 
 def generate_launch_description():
     core1_2024_bringup_pkg = get_package_share_directory('core1_2024_bringup')
     tags_yaml = core1_2024_bringup_pkg + '/config/tags.yaml'
 
-    use_rosbag = LaunchConfiguration('use_rosbag', default='false')
-    use_rosbag_arg = DeclareLaunchArgument('use_rosbag', default_value=use_rosbag, description='Use rosbag')
+    use_apriltag = LaunchConfiguration('use_apriltag', default=False)
+    use_apriltag_arg = DeclareLaunchArgument('use_apriltag', default_value=use_apriltag, description='Use rosbag')
 
     return LaunchDescription([
-        use_rosbag_arg,
+        use_apriltag_arg,
         Node(
-            condition=UnlessCondition(use_rosbag),
+            condition=IfCondition(use_apriltag),
             package='apriltag_ros',
             executable='apriltag_node',
             name='apriltag_node',

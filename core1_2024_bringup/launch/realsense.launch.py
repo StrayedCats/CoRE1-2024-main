@@ -1,9 +1,17 @@
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.conditions import UnlessCondition
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 def generate_launch_description():
+    use_rosbag = LaunchConfiguration('use_rosbag', default='false')
+    use_rosbag_arg = DeclareLaunchArgument('use_rosbag', default_value=use_rosbag, description='Use rosbag')
+
     return LaunchDescription([
+        use_rosbag_arg,
         Node(
+            condition=UnlessCondition(use_rosbag),
             package="realsense2_camera",
             namespace="camera",
             executable="realsense2_camera_node",
