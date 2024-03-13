@@ -28,7 +28,7 @@ ros2 launch core1_2024_bringup main.launch.py use_rosbag:=True rosbag_dir:=${ROS
 ## Options
 
 - use_core1_hardware : Use CoRE-1 hardware or not
-- use_rosbag : Use rosbag or not (If enable, disable RealSense node automatically)
+- use_rosbag : Use rosbag or not (If enable, please set `use_core1_hardware` to `False`)
 - use_viewer : use debug OpenCV window or not
 - rosbag_dir : rosbag directory path
 - use_apriltag : use apriltag detector or not
