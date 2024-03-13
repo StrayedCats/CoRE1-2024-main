@@ -1,9 +1,6 @@
-from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.actions import IncludeLaunchDescription
 from launch.conditions import IfCondition
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.actions import ComposableNodeContainer
@@ -11,8 +8,6 @@ from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
-    core_viewer_launch_pkg = get_package_share_directory('core_viewer_launch')
-
     use_viewer = LaunchConfiguration('use_viewer', default='false')
     use_viewer_arg = DeclareLaunchArgument('use_viewer', default_value=use_viewer, description='Use viewer')
 
@@ -61,10 +56,6 @@ def generate_launch_description():
         ]
     )
 
-    viewer_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([core_viewer_launch_pkg, '/launch/viewer.launch.py'])
-    )
-
     return LaunchDescription([
         use_viewer_arg,
         ComposableNodeContainer(
@@ -79,6 +70,5 @@ def generate_launch_description():
             ],
             output='screen'
         ),
-        bbox2d_to_3d_node,
-        viewer_launch
+        bbox2d_to_3d_node
     ])
