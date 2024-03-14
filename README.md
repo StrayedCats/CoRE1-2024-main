@@ -22,7 +22,7 @@ rosbag + detector
 ROSBAG=/home/core2024/rosbag2_2024_02_25-03_32_06
 
 source ~/ws_2024/install/setup.bash
-ros2 launch core1_2024_bringup main.launch.py use_rosbag:=True rosbag_dir:=${ROSBAG} use_viewer:=True 
+ros2 launch core1_2024_bringup main.launch.py use_rosbag:=True rosbag_dir:=${ROSBAG} use_viewer:=True use_core1_hardware:=False
 ```
 
 ## Options
