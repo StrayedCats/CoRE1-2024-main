@@ -9,7 +9,7 @@ def generate_launch_description():
     core_viewer_launch_pkg = get_package_share_directory('core_viewer_launch')
 
     return LaunchDescription([
-        IncLaunch(PyLaunch([this_launch_pkg, '/launch/sim_detector.launch.py'])),
+        # IncLaunch(PyLaunch([this_launch_pkg, '/launch/sim_detector.launch.py'])),
         IncLaunch(PyLaunch([this_launch_pkg, '/launch/behavior.launch.py'])),
         IncLaunch(PyLaunch([this_launch_pkg, '/launch/realsense.launch.py'])),
         IncLaunch(PyLaunch([auto_driver_pkg, '/launch/auto2024.launch.py'])),

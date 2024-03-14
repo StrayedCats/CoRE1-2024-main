@@ -23,7 +23,8 @@ def generate_launch_description():
             {'yolox_trt_plugin.imshow_isshow': True},
         ],
         remappings=[
-            ('image_raw', '/color/image_raw')
+            ('image_raw', 'camera/color/image_raw'),
+            ('positions', 'detector/positions')
         ]
     )
 
@@ -31,7 +32,11 @@ def generate_launch_description():
         package='bytetrack_cpp_node',
         plugin='bytetrack_cpp_node::ByteTrackNode',
         name='bytetrack_cpp_node',
-        namespace=''
+        namespace='',
+        parameters=[
+            {'sub_bboxes_topic_name': 'detector/positions'},
+            {'pub_bboxes_topic_name': 'tracker/bounding_boxes'}
+        ],
     )
 
     bbox2d_to_3d_node = Node(
@@ -43,10 +48,11 @@ def generate_launch_description():
             {'imshow_isshow': False}
         ],
         remappings=[
-            ('camera_info', 'color/camera_info'),
-            ('color', 'color/image_raw'),
-            ('depth', 'aligned_depth_to_color/image_raw'),
-            ('bbox2d', 'bytetrack/bounding_boxes')
+            ('camera_info', 'camera/color/camera_info'),
+            ('color', 'camera/color/image_raw'),
+            ('depth', 'camera/aligned_depth_to_color/image_raw'),
+            ('bbox2d', 'tracker/bounding_boxes'),
+            ('bbox3d', 'tracker/bounding_boxes_3d')
         ]
     )
 
@@ -57,7 +63,8 @@ def generate_launch_description():
         name='bytetrack_viewer',
         namespace='',
         remappings=[
-            ('image_raw', '/color/image_raw')
+            ('image_raw', 'camera/color/image_raw'),
+            ('/bytetrack/bounding_boxes', '/tracker/bounding_boxes')
         ]
     )
 
