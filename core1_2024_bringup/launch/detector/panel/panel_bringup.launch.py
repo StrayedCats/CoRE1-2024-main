@@ -8,6 +8,7 @@ from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
+
     use_viewer = LaunchConfiguration('use_viewer', default='false')
     use_viewer_arg = DeclareLaunchArgument('use_viewer', default_value=use_viewer, description='Use viewer')
 
@@ -18,10 +19,12 @@ def generate_launch_description():
         namespace='',
         parameters=[
             {'load_target_plugin': 'detector2d_plugins::PanelSimpleDetector'},
-            {'detector2d_parameters.debug': False},
+            {'panel_simple_detector.imshow_isshow': True},
+            {'debug': True},
         ],
         remappings=[
-            ('image_raw', 'blue/camera/image_raw')
+            ('image_raw', 'camera/color/image_raw'),
+            ('positions', 'detector/positions')
         ]
     )
 
@@ -29,19 +32,27 @@ def generate_launch_description():
         package='bytetrack_cpp_node',
         plugin='bytetrack_cpp_node::ByteTrackNode',
         name='bytetrack_cpp_node',
-        namespace=''
+        namespace='',
+        parameters=[
+            {'sub_bboxes_topic_name': 'detector/positions'},
+            {'pub_bboxes_topic_name': 'tracker/bounding_boxes'}
+        ],
     )
 
     bbox2d_to_3d_node = Node(
         package='bbox2d_to_3d_node',
-        executable='add_fake_depth_node_exec',
+        executable='bbox2d_to_3d_quick_node_exec',
         name='bbox2d_to_3d_node',
         namespace='',
         parameters=[
             {'imshow_isshow': False}
         ],
         remappings=[
-            ('bbox2d', 'bytetrack/bounding_boxes')
+            ('camera_info', 'camera/color/camera_info'),
+            ('color', 'camera/color/image_raw'),
+            ('depth', 'camera/aligned_depth_to_color/image_raw'),
+            ('bbox2d', 'tracker/bounding_boxes'),
+            ('bbox3d', 'tracker/bounding_boxes_3d')
         ]
     )
 
@@ -52,7 +63,8 @@ def generate_launch_description():
         name='bytetrack_viewer',
         namespace='',
         remappings=[
-            ('image_raw', 'blue/camera/image_raw')
+            ('image_raw', 'camera/color/image_raw'),
+            ('/bytetrack/bounding_boxes', '/tracker/bounding_boxes')
         ]
     )
 
