@@ -18,9 +18,8 @@ def generate_launch_description():
         name='detector2d_node',
         namespace='',
         parameters=[
-            {'load_target_plugin': 'detector2d_plugins::PanelSimpleDetector'},
-            {'panel_simple_detector.imshow_isshow': True},
-            {'debug': True},
+            {'load_target_plugin': 'detector2d_plugins::PanelDetectorHsv'},
+            {'debug': False},
         ],
         remappings=[
             ('image_raw', 'camera/color/image_raw'),
@@ -77,8 +76,8 @@ def generate_launch_description():
             executable='component_container',
             composable_node_descriptions=[
                 detector_2d,
-                bytetrack_cpp,
-                bytetrack_viewer
+                # bytetrack_cpp,
+                # bytetrack_viewer
             ],
             output='screen'
         ),
