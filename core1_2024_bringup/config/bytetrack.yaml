@@ -1,0 +1,6 @@
+/**:
+    ros__parameters:
+        sub_bboxes_topic_name: "detector/positions"
+        pub_bboxes_topic_name: "tracker/bounding_boxes"
+        video_fps: 30
+        track_buffer: 30

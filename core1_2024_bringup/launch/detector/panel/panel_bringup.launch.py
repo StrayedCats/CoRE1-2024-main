@@ -1,3 +1,4 @@
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
@@ -12,6 +13,9 @@ def generate_launch_description():
     use_viewer = LaunchConfiguration('use_viewer', default='false')
     use_viewer_arg = DeclareLaunchArgument('use_viewer', default_value=use_viewer, description='Use viewer')
 
+    core1_2024_bringup_pkg = get_package_share_directory('core1_2024_bringup')
+    bytetrack_yaml = core1_2024_bringup_pkg + '/config/bytetrack.yaml'
+
     detector_2d = ComposableNode(
         package='detector2d_node',
         plugin='detector2d_node::Detector2dNode',
@@ -19,7 +23,7 @@ def generate_launch_description():
         namespace='',
         parameters=[
             {'load_target_plugin': 'detector2d_plugins::PanelDetectorHsv'},
-            {'debug': False},
+            {'debug': True},
         ],
         remappings=[
             ('image_raw', 'camera/color/image_raw'),
@@ -33,8 +37,7 @@ def generate_launch_description():
         name='bytetrack_cpp_node',
         namespace='',
         parameters=[
-            {'sub_bboxes_topic_name': 'detector/positions'},
-            {'pub_bboxes_topic_name': 'tracker/bounding_boxes'}
+            bytetrack_yaml,
         ],
     )
 
@@ -76,8 +79,8 @@ def generate_launch_description():
             executable='component_container',
             composable_node_descriptions=[
                 detector_2d,
-                # bytetrack_cpp,
-                # bytetrack_viewer
+                bytetrack_cpp,
+                bytetrack_viewer
             ],
             output='screen'
         ),
