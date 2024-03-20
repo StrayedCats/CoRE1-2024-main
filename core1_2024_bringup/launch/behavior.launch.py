@@ -35,4 +35,10 @@ def generate_launch_description():
             name="core1_bt_node",
             output="screen",
         ),
+        Node(
+            condition=UnlessCondition(use_rosbag),
+            package="core1_bt_server_py",
+            executable="tar_server",
+            name="tar_server"
+        ),
     ])

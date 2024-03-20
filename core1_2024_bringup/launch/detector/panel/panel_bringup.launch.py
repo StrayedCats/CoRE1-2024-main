@@ -9,12 +9,9 @@ from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
-
     use_viewer = LaunchConfiguration('use_viewer', default='false')
     use_viewer_arg = DeclareLaunchArgument('use_viewer', default_value=use_viewer, description='Use viewer')
 
-    core1_2024_bringup_pkg = get_package_share_directory('core1_2024_bringup')
-    bytetrack_yaml = core1_2024_bringup_pkg + '/config/bytetrack.yaml'
 
     detector_2d = ComposableNode(
         package='detector2d_node',
@@ -31,42 +28,21 @@ def generate_launch_description():
         ]
     )
 
-    bytetrack_cpp = ComposableNode(
-        package='bytetrack_cpp_node',
-        plugin='bytetrack_cpp_node::ByteTrackNode',
-        name='bytetrack_cpp_node',
-        namespace='',
-        parameters=[
-            bytetrack_yaml,
-        ],
-    )
-
     bbox2d_to_3d_node = Node(
         package='bbox2d_to_3d_node',
         executable='bbox2d_to_3d_quick_node_exec',
         name='bbox2d_to_3d_node',
         namespace='',
         parameters=[
-            {'imshow_isshow': False}
+            {'imshow_isshow': False},
+            {'broadcast_tf': False},
         ],
         remappings=[
             ('camera_info', 'camera/color/camera_info'),
             ('color', 'camera/color/image_raw'),
             ('depth', 'camera/aligned_depth_to_color/image_raw'),
-            ('bbox2d', 'tracker/bounding_boxes'),
+            ('bbox2d', '/detector/positions'),
             ('bbox3d', 'tracker/bounding_boxes_3d')
-        ]
-    )
-
-    bytetrack_viewer = ComposableNode(
-        condition=IfCondition(use_viewer),
-        package='bytetrack_viewer',
-        plugin='bytetrack_viewer::ByteTrackViewer',
-        name='bytetrack_viewer',
-        namespace='',
-        remappings=[
-            ('image_raw', 'camera/color/image_raw'),
-            ('/bytetrack/bounding_boxes', '/tracker/bounding_boxes')
         ]
     )
 
@@ -79,8 +55,6 @@ def generate_launch_description():
             executable='component_container',
             composable_node_descriptions=[
                 detector_2d,
-                bytetrack_cpp,
-                bytetrack_viewer
             ],
             output='screen'
         ),
